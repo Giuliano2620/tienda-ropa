@@ -5,13 +5,16 @@ import { productsRouter } from "./routes/products";
 import { categoriesRouter } from "./routes/categories";
 import { authRouter } from "./routes/auth";
 import { adminProductsRouter } from "./routes/admin-products";
+import { ordersRouter } from "./routes/orders";
+
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json());
-ap  p.use("/api/admin/products", adminProductsRouter);
+app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/orders", ordersRouter);
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
