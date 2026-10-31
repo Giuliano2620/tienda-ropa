@@ -1,6 +1,26 @@
 import { prisma } from "../src/lib/prisma";
+import bcrypt from "bcryptjs";
 
-async function main() {
+async function main(){
+
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error("Faltan ADMIN_EMAIL y ADMIN_PASSWORD en el archivo .env");
+  }
+
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {},
+    create: {
+      name: "Administrador",
+      email: adminEmail,
+      passwordHash: await bcrypt.hash(adminPassword, 10),
+      role: "ADMIN",
+    },
+  });
+
   const remeras = await prisma.category.upsert({
     where: { slug: "remeras" },
     update: {},
